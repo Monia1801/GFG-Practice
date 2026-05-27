@@ -1,0 +1,28 @@
+class Solution {
+  public:
+    bool wifiRange(string &s, int x) {
+        int n = s.size();
+        vector<int> diff(n + 1, 0);
+
+        // Step 1: mark coverage ranges
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '1') {
+                int left = max(0, i - x);
+                int right = min(n - 1, i + x);
+
+                diff[left] += 1;
+                if (right + 1 < n)
+                    diff[right + 1] -= 1;
+            }
+        }
+
+        // Step 2: prefix sum to check coverage
+        int coverage = 0;
+        for (int i = 0; i < n; i++) {
+            coverage += diff[i];
+            if (coverage <= 0) return false;
+        }
+
+        return true;
+    }
+};
